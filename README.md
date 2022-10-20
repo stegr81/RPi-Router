@@ -18,11 +18,13 @@
 
 ###### To prepare the SD card, you'll need to download a [Raspbian image](https://www.raspberrypi.org/downloads/raspbian/) and flash the image onto the SD card using [Balena Etcher](https://www.balena.io/etcher).
 
-###### Pop the SD card into the Pi and power it up.
+###### Pop the SD card into the Pi, attach the relevant cables and peripherals and power it up.
 
 ###### After a few setting you'll be into the GUI. Then connect to your preferred wifi connection.
 
 ###### It's always worth running the update/upgrade processes
+
+###### Open up a terminal window and type...
 
 `sudo apt-get update`
 
