@@ -1,7 +1,7 @@
 # RPi-Router
 ## Using a Raspberry Pi's WiFi Connection to Provide Internet to Devices via Ethernet
 
-###### During periods away from home I spend significant time in accommodation that has public wifi that requires a user to login on a splash page with no direct access to a router. I wanted to be able to use some IoT devices, mainly wifi enabled power outlets, to control things like light and heating. Initially it was just so I could turn on the heat on my way there rather than arrive to a cold room.
+###### During periods away from home for work, I spend significant time in accommodation that has public wifi that requires the user to login on a splash page with no direct access to a router. I wanted to be able to use some IoT devices in the room, mainly wifi enabled power outlets, to control things like light and heating. Initially it was just so I could turn on the heat on my way there rather than arrive to a cold room.
 
 ###### I had a spare RPi so figured I could use that to connect to the wifi, then share that connection with the ethernet port and plug in an old Sky router I had in the garage, giving me a network in front of the network, so to speak.
 
@@ -16,6 +16,14 @@
 ###### 4. A USB mouse and keyboard
 ###### 5. A router and an ethernet cable
 
-###### To prepare the SD card, you'll need to download a [Raspbian image](https://www.raspberrypi.org/downloads/raspbian/) (lite is fine) and flash the image onto the SD card using [Balena Etcher](https://www.balena.io/etcher).
+###### To prepare the SD card, you'll need to download a [Raspbian image](https://www.raspberrypi.org/downloads/raspbian/) and flash the image onto the SD card using [Balena Etcher](https://www.balena.io/etcher).
 
 ###### Pop the SD card into the Pi and power it up.
+
+###### There'll be a few processes to go through potentially. Then connect to your preferred wifi connection.
+
+###### It's always worth running the update/upgrade processes
+
+`sudo apt-get update`
+
+`sudo apt-get upgrade`
