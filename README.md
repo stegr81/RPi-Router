@@ -20,7 +20,7 @@
 
 ###### Pop the SD card into the Pi and power it up.
 
-###### There'll be a few processes to go through potentially. Then connect to your preferred wifi connection.
+###### After a few setting you'll be into the GUI. Then connect to your preferred wifi connection.
 
 ###### It's always worth running the update/upgrade processes
 
