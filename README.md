@@ -28,4 +28,8 @@
 
 `sudo apt-get update`
 
+###### Once it's done it's thing, go again with...
+
 `sudo apt-get upgrade`
+
+
