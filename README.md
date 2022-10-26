@@ -39,12 +39,17 @@
 `sudo apt-get install isc-dhcp-server`
 
 ## Define the Server Settings
-###### We need to define the network and associated addresses that the DHCP server will be serving. To do that we need to modify the configuration file. I had a few issues with this initially, but there aren't really too many things to consider.
+###### We need to define the network and associated addresses that the DHCP server will be serving. To do that we need to modify the configuration file. I had a few issues with this initially, but there aren't really too many things to consider. In the end I got rid of most of what was in there and replaced it with just what I needed.
 ###### To edit files I use Nano, but feel free to use whichever text editor you prefer...
 `sudo nano /etc/dhcp/dhcpd.conf`
-###### You'll find that everything is hashed out. Find the line that says 'authoritative' and unhash it.
-###### At the end of the file enter the following:
+###### You can find the lines mentioned below and unhas them where required, adding the subnet settings at the end of the file, or just copy this and replace everything already in the file.
 ```
+ddns-update-sytle none;
+
+default-lease-time 600;
+max-lease-time 7200;
+
+authoritative;
 subnet 192.168.10.0 netmask 255.255.255.0 {
  range 192.168.10.10 192.168.10.250;
  option broadcast-address 192.168.10.255;
