@@ -38,6 +38,7 @@
 
 `sudo apt-get install isc-dhcp-server`
 
+## Define the Server Settings
 ###### We need to define the network and associated addresses that the DHCP server will be serving. To do that we need to modify the configuration file. I had a few issues with this initially, but there aren't really too many things to consider.
 ###### To edit files I use Nano, but feel free to use whichever text editor you prefer...
 `sudo nano /etc/dhcp/dhcpd.conf`
