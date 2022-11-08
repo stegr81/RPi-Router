@@ -127,8 +127,95 @@ cd RTL8188-hostapd-1.1/hostapd sudo make sudo make install
 
 ###### I'll caveat that I haven't tried it this way around, but you should be good to go. If you have any issues, check out [this guide](https://raspberrypihq.com/how-to-turn-a-raspberry-pi-into-a-wifi-router/)
 
-## Possible Issues
-###### I found that, for some so far unknown reason, the connection would drop occasionally, but running the IP/NAT configuration sorted it. I created a bash script containing that would start the dhcp server, ensure the wlan and eth were up and reset the IP forwarding rules. This seemed to work well enough.
+## Extras
+###### I found that, for some so far unknown reason, the connection would drop occasionally, but running the IP Forwarding/NAT configuration sorted it. I created a bash script for ease and as something I could set to run at reboot, mainly in the case of power cuts to ensure reconnection if I wasn't around.
+
+```
+echo Starting DHCP server
+#starting dhcp server
+sudo service isc-dhcp-server start
+#ensuring both wlan and eth are active
+sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+sudo ifup wlan0
+sudo ifup eth0
+#set NAT
+echo Setting NAT routing
+sudo iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+sudo iptables -A FORWARD -i wlan0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i eht0 -o wlan0 -j ACCEPT
+echo NAT routing set
+#ensure the wifi is prioritised over the wlan
+DEFAULT_IFACE=`route -n | grep -E "^0.0.0.0 .+UG" | awk '{print $8}'`
+if [ "$DEFAULT_IFACE" != "wlan0" ]
+then
+  GW=`route -n | grep -E "^0.0.0.0 .+UG .+wlan0$" | awk '{print $2}'`
+  echo Setting default route to wlan0 via $GW
+  sudo route del default $DEFAULT_IFACE
+  sudo route add default gw $GW wlan0
+fi
+```
+
+###### Ordinarily I set files to run at boot by editing `/etc/rc.local`, however in this instance, because this will run during boot, rather once boot is complete, I found it didn't work. Instead edit `/etc/bash.bashrc` and add `sudo bash <file path>`.
+
+###### To keep my connection alive I created a Python script that conducts regular GET requests or, if they fail to produce a 200 response, run the bash script to reconnect everthing. This works really well until my connection has been running for 7 days, then my wifi network disconnects me.
+
+###### To get around this is likely personal to you/your situation. To solve this aspect I created an additional function in my Python script that essentially conducts a POST request and logs me back in if the script fails to get a positive status update from the IoT device. This check is conducted each time the GET request runs, so around every 15 minutes. The full script is below, but with identifying aspects removed.
+
+```
+import requests,re,os,subprocess,sys
+from time import sleep
+from datetime import datetime
+
+def login():
+        r=requests.get('<splash page for public wifi>')
+        p=re.compile(r'("csrfmiddlewaretoken".value="([^"]*))') #The services uses CSRF authentication tokens, so I find this using regex
+        csrfmiddlewaretoken=p.search(r.text)[2]
+        print(f'Authentication token: {csrfmiddlewaretoken}')
+        url='<login in URL for public wifi>'
+        payload={
+                'csrfmiddlewaretoken':csrfmiddlewaretoken,
+                'next':'/',
+                'username':'xxxxxxxxxx',
+                'password':'xxxxxxxxxxxxx',
+                }
+        conn=requests.post(url,data=payload)
+        print(f'Connection Code: {conn}')
+subprocess.run(['<bash script file path>', 'arguments'], shell=True)
+sleep(2)
+login()
+sleep(10)
+try:
+        import tinytuya as tt # my device is TUYA enabled so all of the tt parts relate to that.
+except:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "tinytuya"])
+        import tinytuya as tt
+
+socket=tt.OutletDevice(
+        dev_id='xxxxxxxxxxxxxxxxxxxxxxxx',
+        address='192.168.xx.xx',
+        local_key='xxxxxxxxxxxxxxxxxx',
+        dev_type='default',
+        version=3.3
+        )
+
+while True:
+        try:
+                resp = requests.get("<a suitable page URL>")
+                if resp.status_code == 200:
+                        print(f"{str(datetime.now())} - respone:{resp}")
+                        sleep(900)
+        except:
+                subprocess.run(['<bash script file path>', 'arguments'], shell=True)
+                sleep(30)
+                continue
+        status=socket.status()
+        if 'dps' not in status.keys():
+                login()
+                sleep(30)
+                continue
+```
+
+
 
 
 
