@@ -168,7 +168,7 @@ from datetime import datetime
 
 def login():
         r=requests.get('<splash page for public wifi>')
-        p=re.compile(r'("csrfmiddlewaretoken".value="([^"]*))') #The services uses CSRF authentication tokens, so I find this using regex
+        p=re.compile(r'("csrfmiddlewaretoken".value="([^"]*))') # The services uses CSRF authentication tokens, I find this using regex. It's unique and one time use.
         csrfmiddlewaretoken=p.search(r.text)[2]
         print(f'Authentication token: {csrfmiddlewaretoken}')
         url='<login in URL for public wifi>'
@@ -215,6 +215,9 @@ while True:
                 continue
 ```
 
+###### Since this script runs the bash script anyway, it should remove the need to have the bash script in bash.bashrc, so you can replace that with `sudo python3 <file path>`
+## Done
+###### Using the Python scripts assumes certain pre-existing configuration on your Pi, such as the presense of PIP. Also, the latter script works for me and my device and is meant purely as a demonstration of how I approached a specific problem but requires additional effort with other services not covered here. The whole piece is designed as a guide but probably assumes some knowledge or contains mistakes or oversights on my part, but hopefully it works for you. Happy tinkering.
 
 
 
