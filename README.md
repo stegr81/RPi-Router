@@ -157,7 +157,7 @@ fi
 
 ###### Ordinarily I set files to run at boot by editing `/etc/rc.local`, however in this instance, because this will run during boot, rather once boot is complete, I found it didn't work. Instead edit `/etc/bash.bashrc` and add `sudo bash <file path>`.
 
-###### To keep my connection alive I created a Python script that conducts regular GET requests or, if they fail to produce a 200 response, run the bash script to reconnect everthing. This works really well until my connection has been running for 7 days, then my wifi network disconnects me.
+###### To keep my connection alive I created a Python script that conducts regular GET requests or, if they fail to produce a 200 response, run the bash script to reconnect everthing. This works really well until my connection has been running for 7 days, then the public network disconnects me.
 
 ###### To get around this is likely personal to you/your situation. To solve this aspect I created an additional function in my Python script that essentially conducts a POST request and logs me back in if the script fails to get a positive status update from the IoT device. This check is conducted each time the GET request runs, so around every 15 minutes. The full script is below, but with identifying aspects removed.
 
