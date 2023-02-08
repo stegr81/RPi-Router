@@ -42,7 +42,7 @@
 ###### We need to define the network and associated addresses that the DHCP server will be serving. To do that we need to modify the configuration file. I had a few issues with this initially, but there aren't really too many things to consider. In the end I got rid of most of what was in there and replaced it with just what I needed.
 ###### To edit files I use Nano, but feel free to use whichever text editor you prefer...
 ```sudo nano /etc/dhcp/dhcpd.conf```
-###### You can find the lines mentioned below and unhas them where required, adding the subnet settings at the end of the file, or just copy this and replace everything already in the file.
+###### You can find the lines mentioned below and unhash them where required, adding the subnet settings at the end of the file, or just copy this and replace everything already in the file.
 ```
 ddns-update-sytle none;
 
