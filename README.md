@@ -111,6 +111,7 @@ then
   sudo route add default gw $GW wlan0
 fi
 ```
+###### If you are trying to share the connection with another router, as I was, you will need to modify the default gateway of the router to match the static IP you've set on the Pi.
 
 ###### At this point we should be done. The whole guide was designed to show how to share the wifi connection of a RPi via it's LAN port, however, as stated in the header, if you want to do the opposite and share a wired connection, turing your Pi into a wireless access point. To do this there's a few extra steps and one piece of extra hardware required.
 ###### You'll need a USB wifi adaptor, which you can plug into one of the spare ports on the Pi.
