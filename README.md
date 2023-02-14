@@ -102,13 +102,14 @@ sudo iptables -A FORWARD -i eth0 -o wlan0 -j ACCEPT
 
 ###### We need to prioritise the wlan
 ```
-DEFAULT_IFACE=`route -n | grep -E "^0.0.0.0 .+UG" | awk '{print $8}'`
-if [ "$DEFAULT_IFACE" != "wlan0" ]
-then
-  GW=`route -n | grep -E "^0.0.0.0 .+UG .+wlan0$" | awk '{print $2}'`
-  echo Setting default route to wlan0 via $GW
-  sudo route del default $DEFAULT_IFACE
-  sudo route add default gw $GW wlan0
+# Get the current default route interface
+DEFAULT_IFACE=$(ip route | awk '/^default/ {print $5}')
+
+# If the default route interface is not wlan0, set the default route to use wlan0 instead
+if [ "$DEFAULT_IFACE" != "wlan0" ]; then
+  GW=$(ip route | awk '/^default/ {print $3}')
+  ip route del default via $GW dev $DEFAULT_IFACE
+  ip route add default via $GW dev wlan0
 fi
 ```
 ###### If you are trying to share the connection with another router, as I was, you will need to modify the default gateway of the router to match the static IP you've set on the Pi.
